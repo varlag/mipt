@@ -58,23 +58,41 @@ void Game_Window::draw() {
         fl_line(0, y, w(), y);
     }
     
-    // Рисуем еду перед змейкой, чтобы она была видна
     if (meal) {
-        fl_color(FL_RED);
-        int meal_x = meal->getX() * cell_size;
-        int meal_y = meal->getY() * cell_size;
-        fl_rectf(meal_x, meal_y, cell_size, cell_size);
+    static Fl_Color food_colors[] = {
+        fl_rgb_color(0, 255, 255),    
+        fl_rgb_color(255, 0, 128),    
+        fl_rgb_color(0, 255, 128),    
+        fl_rgb_color(255, 128, 0),    
+        fl_rgb_color(128, 0, 255),    
+        fl_rgb_color(255, 255, 128),  
+        fl_rgb_color(128, 255, 255),  
+        fl_rgb_color(255, 128, 255)   
+    };
+        
+    static int current_color_index = 0;
+    static int last_meal_x = -1;
+    static int last_meal_y = -1;
+    
+    if (meal->getX() != last_meal_x || meal->getY() != last_meal_y) {
+        current_color_index = (current_color_index + 1) % 8;
+        last_meal_x = meal->getX();
+        last_meal_y = meal->getY();
     }
     
-    // Затем рисуем змейку поверх фона
+    fl_color(food_colors[current_color_index]);
+    int meal_x = meal->getX() * cell_size;
+    int meal_y = meal->getY() * cell_size;
+    fl_rectf(meal_x, meal_y, cell_size, cell_size);
+    }
+    
     fl_color(FL_GRAY);
     for(int i = 0; i < player->len(); ++i) {
         int x = player->get_snake_coordinates_x(i) * cell_size;
         int y = player->get_snake_coordinates_y(i) * cell_size;
         fl_rectf(x, y, cell_size, cell_size);
     }
-    
-    // Рисуем голову 
+
     if (player->len() > 0) {
         fl_color(FL_WHITE);
         int x = player->get_snake_coordinates_x(0) * cell_size;

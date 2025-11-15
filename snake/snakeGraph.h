@@ -10,6 +10,7 @@ private:
     int cell_size;
     food* meal; 
     SnakeBackground background; 
+    double pulse_phase = 0.0;
 
 public:
     Game_Window(int w, int h, snake* s, int cell_size = 20);
@@ -20,6 +21,9 @@ public:
     int get_cell_size();
     snake* get_player();
     food* get_meal();
+
+    void update_pulse() { pulse_phase += 0.2; }
+    double get_pulse_phase() const { return pulse_phase; }
 };
 
 class BackgroundWindow : public Fl_Window {

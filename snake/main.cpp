@@ -11,6 +11,8 @@ void game_tick(void* userdata) {
     int max_width  = window->w() / cellsize;
     int max_height = window->h() / cellsize;
     
+    window->update_pulse();
+
     p->move();
     if (p->grow(meal)) 
     {
